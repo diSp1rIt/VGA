@@ -200,8 +200,8 @@ class Program(QWidget, Ui_Form):
 
         if self.db_file is not None:
             if self.vk is not None:
-                for offset in range(0, self.vk.get_count(str(self.site.text())), 1000):
-                    self.vk.getDataFromGroup(str(self.site.text()), offset)
+                if self.rbtn_one1k.isChecked():
+                    self.vk.getDataFromGroup(str(self.site.text()), 0)
                     self.vk.convertData()
                     if self.vk.data is not None:
                         for user in self.vk.data:
@@ -209,9 +209,19 @@ class Program(QWidget, Ui_Form):
                         self.sql.con.commit()
                         self.vk.data = None
                         addLog('|Main|: Successful added users.')
-                    else:
-                        addLog('|Main|: Data is None.')
-                    sleep(0.06)
+                else:
+                    for offset in range(0, self.vk.get_count(str(self.site.text())), 1000):
+                        self.vk.getDataFromGroup(str(self.site.text()), offset)
+                        self.vk.convertData()
+                        if self.vk.data is not None:
+                            for user in self.vk.data:
+                                self.sql.add_user(user)
+                            self.sql.con.commit()
+                            self.vk.data = None
+                            addLog('|Main|: Successful added users.')
+                        else:
+                            addLog('|Main|: Data is None.')
+                        sleep(0.06)
             else:
                 addLog('|Main|: Didn\'t chosen token file.')
         else:
