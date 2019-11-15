@@ -78,7 +78,8 @@ class Program(QWidget, Ui_Form):
         self.show_logs()
 
     def openFileToken(self):
-        path = QFileDialog.getOpenFileName(self, 'Файл с токеном vk', '', 'Текстовый файл (*.txt)')[0]
+        path = QFileDialog.getOpenFileName(self, 'Файл с токеном vk', '', 'Текстовый файл (*.txt)')[
+            0]
         try:
             with open(path, 'r') as f:
                 for line in f:
@@ -108,6 +109,7 @@ class Program(QWidget, Ui_Form):
                             self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
                 except Exception as e:
                     addLog('|Main|: ' + str(e))
+                del data  # Очистка памяти
             elif self.comboBox.currentText() == 'Показать всё':
                 data = self.sql.get_all()
                 try:
@@ -118,6 +120,7 @@ class Program(QWidget, Ui_Form):
                             self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
                 except Exception as e:
                     addLog('|Main|: ' + str(e))
+                del data  # Очистка памяти
             elif self.comboBox.currentText() == 'Возраст':
                 data = self.sql.get_age(group_id)
                 try:
@@ -148,6 +151,7 @@ class Program(QWidget, Ui_Form):
                                            pen='b')
                 except Exception as e:
                     addLog('|Main|: ' + str(e))
+                del data  # Очистка памяти
             elif self.comboBox.currentText() == 'Пол':
                 data = self.sql.get_sex(group_id)
                 # Вывод в таблицу
@@ -156,22 +160,29 @@ class Program(QWidget, Ui_Form):
                 for i, user in enumerate(data):
                     for j, elem in enumerate(user):
                         self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
+                del data  # Очистка памяти
             elif self.comboBox.currentText() == 'Кол-во \"banned\"':
                 data = self.sql.get_banned(group_id)
+                count = len(data)
                 # Вывод в таблицу
                 self.tableWidget.setRowCount(len(data))
                 self.tableWidget.setColumnCount(len(data[0]))
                 for i, user in enumerate(data):
                     for j, elem in enumerate(user):
                         self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
+                self.l_count.setText(f'Количество забаненых пользователей: {count}')
+                del data  # Очистка памяти
             elif self.comboBox.currentText() == 'Кол-во \"deleted\"':
                 data = self.sql.get_deleted(group_id)
+                count = len(data)
                 # Вывод в таблицу
                 self.tableWidget.setRowCount(len(data))
                 self.tableWidget.setColumnCount(len(data[0]))
                 for i, user in enumerate(data):
                     for j, elem in enumerate(user):
                         self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
+                self.l_count.setText(f'Количество забаненых пользователей: {count}')
+                del data  # Очистка памяти
         else:
             addLog('|Main|: Didn\'t chosen db file.')
         self.show_logs()
