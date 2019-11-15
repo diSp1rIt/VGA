@@ -89,7 +89,7 @@ class SQL:
         else:
             addLog('|SQL|: ' + 'DataBase isn\'t valid.')
 
-    def get_sex(self, group_id):
+    def get_sex(self, group_id=None):
         if self.valid_db:
             if group_id is not None:
                 try:
@@ -125,5 +125,29 @@ class SQL:
                     addLog('|SQL|: ' + str(e))
             else:
                 addLog('|SQL|: Group didn\'t chosen.')
+        else:
+            addLog('|SQL|: ' + 'DataBase isn\'t valid.')
+
+    def get_banned(self, group_id=None):
+        if self.valid_db:
+            if group_id is not None:
+                try:
+                    return self.cur.execute(f'''SELECT id, first_name, last_name, deactivated 
+                    FROM users
+                    WHERE group_id IN (SELECT DISTINCT group_id FROM users
+                        WHERE group_id LIKE "%,_{group_id},_%" 
+                        OR group_id LIKE "%,_{group_id}" 
+                        OR group_id LIKE "{group_id}" 
+                        OR group_id LIKE "{group_id},_%") AND deactivated = "banned"''').fetchall()
+                except Exception as e:
+                    addLog('|SQL|: ' + str(e))
+            else:
+                try:
+                    return self.cur.execute(
+                        '''SELECT id, first_name, last_name, deactivated FROM users
+                        WHERE deactivated = "banned"'''
+                    ).fetchall()
+                except Exception as e:
+                    addLog('|SQL|: ' + str(e))
         else:
             addLog('|SQL|: ' + 'DataBase isn\'t valid.')
