@@ -64,7 +64,6 @@ class VkParser:
         if self.data is not None:
             self.data = self.data['items']
             for user in self.data:
-
                 for field in str('id, group_id, first_name, last_name, deactivated, '
                                  + self.fields).split(', '):
                     if field == 'group_id':

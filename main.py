@@ -48,11 +48,11 @@ class Program(QWidget, Ui_Form):
             self.db_file = QFileDialog.getOpenFileName(self, 'Выберете базу данных',
                                                        '', 'База данных (*.db)')[0]
             try:
-                # Попытка Подключиться к этой базе
                 self.sql = SqlWorker.SQL(self.db_file)
                 self.sql.cur.execute('''SELECT * FROM users''')
-            except Exception as e:
-                addLog('|Main|: ' + str(e))
+            except:
+                self.db_file = None
+                addLog('|Main|: Error when changing db.')
             # Возращение изначальной функции кнопки
             self.btn_file_db.clicked.connect(self.openFileWidget)
 
@@ -206,7 +206,6 @@ class Program(QWidget, Ui_Form):
                     if self.vk.data is not None:
                         for user in self.vk.data:
                             self.sql.add_user(user)
-                        self.sql.con.commit()
                         self.vk.data = None
                         addLog('|Main|: Successful added users.')
                 else:

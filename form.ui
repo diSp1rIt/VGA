@@ -58,11 +58,6 @@
    </item>
    <item>
     <property name="text">
-     <string>Показать всё</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
      <string>Пол</string>
     </property>
    </item>
