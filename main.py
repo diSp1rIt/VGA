@@ -30,6 +30,8 @@ class Program(QWidget, Ui_Form):
         self.btn_search.clicked.connect(self.do_search)
         self.btn_update.clicked.connect(self.update_)
         self.btn_file_token.clicked.connect(self.openFileToken)
+        self.btn_open.clicked.connect(self.open_)
+        self.btn_save.clicked.connect(self.save)
         # Конец привязки
 
     # Функция отображает текущие логи
@@ -40,41 +42,42 @@ class Program(QWidget, Ui_Form):
     # Функция выбора файла db
     def openFileWidget(self):
         self.widget.show()  # Отображение виджета
+        self.btn_file_db.clicked.connect(self.empty_click)  # Перезначение на повторное нажатие
+        self.show_logs()
 
-        #  Открытия диалогового окна выбора файла
-        def open_():
-            self.widget.hide()  # Скрытие виджета
-            # Открытие диалогового окна и запись пути до файла в self.db_file
-            self.db_file = QFileDialog.getOpenFileName(self, 'Выберете базу данных',
-                                                       '', 'База данных (*.db)')[0]
+    #  Открытия диалогового окна выбора файла
+    def open_(self):
+        # Возращение изначальной функции кнопки
+        self.btn_file_db.clicked.connect(self.openFileWidget)
+        self.widget.hide()  # Скрытие виджета
+        # Открытие диалогового окна и запись пути до файла в self.db_file
+        self.db_file = QFileDialog.getOpenFileName(self, 'Выберете базу данных',
+                                                   '', 'База данных (*.db)')[0]
+        if self.db_file != '':
             try:
                 self.sql = SqlWorker.SQL(self.db_file)
                 self.sql.cur.execute('''SELECT * FROM users''')
-            except:
-                self.db_file = None
-                addLog('|Main|: Error when changing db.')
-            # Возращение изначальной функции кнопки
-            self.btn_file_db.clicked.connect(self.openFileWidget)
-
-        def save():
-            self.widget.hide()
-            try:
-                self.sql.con.commit()
-                addLog('|Main|: Data saved.')
             except Exception as e:
+                self.db_file = None
                 addLog('|Main|: ' + str(e))
-            self.btn_file_db.clicked.connect(self.openFileWidget)
+        else:
+            self.db_file = None
+        self.show_logs()
 
-        # Функция повторного нажатия на кнопку закрывает виджет без каких либо действий
-        def empty_click():
-            self.widget.hide()
-            self.btn_file_db.clicked.connect(self.openFileWidget)
+    def save(self):
+        self.widget.hide()
+        try:
+            self.sql.con.commit()
+            addLog('|Main|: Data saved.')
+        except Exception as e:
+            addLog('|Main|: ' + str(e))
+        self.btn_file_db.clicked.connect(self.openFileWidget)
+        self.show_logs()
 
-        # Определение функций кнопок
-        self.btn_file_db.clicked.connect(empty_click)  # Перезначение функции на повторное нажатие
-        self.btn_open.clicked.connect(open_)
-        self.btn_save.clicked.connect(save)
-
+    # Функция повторного нажатия на кнопку закрывает виджет без каких либо действий
+    def empty_click(self):
+        self.btn_file_db.clicked.connect(self.openFileWidget)
+        self.widget.hide()
         self.show_logs()
 
     def openFileToken(self):
