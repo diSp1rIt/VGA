@@ -96,6 +96,16 @@ class Program(QWidget, Ui_Form):
 
     # Функция поиска данных в базе
     def do_search(self):
+        self.btn_file_db.setEnabled(False)
+        self.btn_file_token.setEnabled(False)
+        self.site.setEnabled(False)
+        self.comboBox.setEnabled(False)
+        self.btn_search.setEnabled(False)
+        self.tabWidget.setEnabled(False)
+        self.btn_update.setEnabled(False)
+        self.status.setText('Поиск данных...')
+        self.repaint()
+
         self.tableWidget.clear()
         self.tableWidget.setRowCount(0)
         self.tableWidget.setColumnCount(0)
@@ -104,28 +114,33 @@ class Program(QWidget, Ui_Form):
         if self.db_file is not None:
             if self.comboBox.currentText() == 'Показать текущую группу':
                 data = self.sql.get_curent(group_id)
+                count = len(data)
                 try:
                     self.tableWidget.setRowCount(len(data))
                     self.tableWidget.setColumnCount(len(data[0]))
                     for i, user in enumerate(data):
                         for j, elem in enumerate(user):
                             self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
+                    self.l_count.setText(f'Количество найденных записей: {count}')
                 except Exception as e:
                     addLog('|Main|: ' + str(e))
                 del data  # Очистка памяти
             elif self.comboBox.currentText() == 'Показать всё':
                 data = self.sql.get_all()
+                count = len(data)
                 try:
                     self.tableWidget.setRowCount(len(data))
                     self.tableWidget.setColumnCount(len(data[0]))
                     for i, user in enumerate(data):
                         for j, elem in enumerate(user):
                             self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
+                    self.l_count.setText(f'Количество найденных записей: {count}')
                 except Exception as e:
                     addLog('|Main|: ' + str(e))
                 del data  # Очистка памяти
             elif self.comboBox.currentText() == 'Возраст':
                 data = self.sql.get_age(group_id)
+                count = len(data)
                 try:
                     # Вывод в таблицу
                     self.tableWidget.setRowCount(len(data))
@@ -133,6 +148,7 @@ class Program(QWidget, Ui_Form):
                     for i, user in enumerate(data):
                         for j, elem in enumerate(user):
                             self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
+                    self.l_count.setText(f'Количество найденных записей: {count}')
 
                     # Построения графика возраста от кол-ва
                     self.y_axis.setText('Количество людей')
@@ -157,12 +173,14 @@ class Program(QWidget, Ui_Form):
                 del data  # Очистка памяти
             elif self.comboBox.currentText() == 'Пол':
                 data = self.sql.get_sex(group_id)
+                count = len(data)
                 # Вывод в таблицу
                 self.tableWidget.setRowCount(len(data))
                 self.tableWidget.setColumnCount(len(data[0]))
                 for i, user in enumerate(data):
                     for j, elem in enumerate(user):
                         self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
+                self.l_count.setText(f'Количество найденных записей: {count}')
                 del data  # Очистка памяти
             elif self.comboBox.currentText() == 'Кол-во \"banned\"':
                 data = self.sql.get_banned(group_id)
@@ -184,10 +202,21 @@ class Program(QWidget, Ui_Form):
                 for i, user in enumerate(data):
                     for j, elem in enumerate(user):
                         self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
-                self.l_count.setText(f'Количество забаненых пользователей: {count}')
+                self.l_count.setText(f'Количество удалённых пользователей: {count}')
                 del data  # Очистка памяти
         else:
             addLog('|Main|: Didn\'t chosen db file.')
+
+        self.btn_file_db.setEnabled(True)
+        self.btn_file_token.setEnabled(True)
+        self.site.setEnabled(True)
+        self.comboBox.setEnabled(True)
+        self.btn_search.setEnabled(True)
+        self.tabWidget.setEnabled(True)
+        self.btn_update.setEnabled(True)
+        self.status.setText('')
+        self.repaint()
+
         self.show_logs()
 
     def update_(self):
@@ -239,7 +268,6 @@ class Program(QWidget, Ui_Form):
         self.status.setText('')
         self.repaint()
 
-        self.do_search()
         self.show_logs()
 
 
