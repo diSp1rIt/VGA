@@ -376,16 +376,6 @@ color: rgb(255, 255, 255);</string>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="btn_file_csv">
-       <property name="text">
-        <string>Сохранить в csv формат</string>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
     </layout>
    </widget>
   </widget>
