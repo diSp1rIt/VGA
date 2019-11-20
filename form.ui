@@ -267,16 +267,6 @@ background-color: rgb(211, 215, 207);</string>
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="tab_2">
-    <attribute name="title">
-     <string>Круговая диаграмма</string>
-    </attribute>
-   </widget>
-   <widget class="QWidget" name="tab_4">
-    <attribute name="title">
-     <string>Столбчатый график</string>
-    </attribute>
-   </widget>
   </widget>
   <widget class="QTextEdit" name="logs">
    <property name="geometry">
