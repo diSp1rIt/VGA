@@ -85,9 +85,7 @@ class Program(QWidget, Ui_Form):
             0]
         try:
             with open(path, 'r') as f:
-                for line in f:
-                    self.token = line
-                    break
+                self.token = str(f.readlines(1)[0])
             self.vk = VkApiWorker.VkParser(self.token)
         except Exception as e:
             addLog('|Main|: ' + str(e))
