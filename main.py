@@ -115,15 +115,13 @@ class Program(QWidget, Ui_Form):
             if self.comboBox.currentText() == 'Показать текущую группу':
                 data = self.sql.get_curent(group_id)
                 count = len(data)
-                try:
+                if count != 0:
                     self.tableWidget.setRowCount(len(data))
                     self.tableWidget.setColumnCount(len(data[0]))
                     for i, user in enumerate(data):
                         for j, elem in enumerate(user):
                             self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
-                    self.l_count.setText(f'Количество найденных записей: {count}')
-                except Exception as e:
-                    addLog('|Main|: ' + str(e))
+                self.l_count.setText(f'Количество найденных записей: {count}')
                 del data  # Очистка памяти
             elif self.comboBox.currentText() == 'Показать всё':
                 data = self.sql.get_all()
@@ -141,7 +139,7 @@ class Program(QWidget, Ui_Form):
             elif self.comboBox.currentText() == 'Возраст':
                 data = self.sql.get_age(group_id)
                 count = len(data)
-                try:
+                if count != 0:
                     # Вывод в таблицу
                     self.tableWidget.setRowCount(len(data))
                     self.tableWidget.setColumnCount(len(data[0]))
@@ -168,40 +166,42 @@ class Program(QWidget, Ui_Form):
                     self.graphicsView.plot(sorted(list(set(ages))),
                                            [minn for _ in range(len(sorted(list(set(ages)))))],
                                            pen='b')
-                except Exception as e:
-                    addLog('|Main|: ' + str(e))
+                self.l_count.setText(f'Количество найденных записей: {count}')
                 del data  # Очистка памяти
             elif self.comboBox.currentText() == 'Пол':
                 data = self.sql.get_sex(group_id)
                 count = len(data)
                 # Вывод в таблицу
-                self.tableWidget.setRowCount(len(data))
-                self.tableWidget.setColumnCount(len(data[0]))
-                for i, user in enumerate(data):
-                    for j, elem in enumerate(user):
-                        self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
+                if count != 0:
+                    self.tableWidget.setRowCount(len(data))
+                    self.tableWidget.setColumnCount(len(data[0]))
+                    for i, user in enumerate(data):
+                        for j, elem in enumerate(user):
+                            self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
                 self.l_count.setText(f'Количество найденных записей: {count}')
                 del data  # Очистка памяти
             elif self.comboBox.currentText() == 'Кол-во \"banned\"':
                 data = self.sql.get_banned(group_id)
                 count = len(data)
                 # Вывод в таблицу
-                self.tableWidget.setRowCount(len(data))
-                self.tableWidget.setColumnCount(len(data[0]))
-                for i, user in enumerate(data):
-                    for j, elem in enumerate(user):
-                        self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
+                if count != 0:
+                    self.tableWidget.setRowCount(len(data))
+                    self.tableWidget.setColumnCount(len(data[0]))
+                    for i, user in enumerate(data):
+                        for j, elem in enumerate(user):
+                            self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
                 self.l_count.setText(f'Количество забаненых пользователей: {count}')
                 del data  # Очистка памяти
             elif self.comboBox.currentText() == 'Кол-во \"deleted\"':
                 data = self.sql.get_deleted(group_id)
                 count = len(data)
                 # Вывод в таблицу
-                self.tableWidget.setRowCount(len(data))
-                self.tableWidget.setColumnCount(len(data[0]))
-                for i, user in enumerate(data):
-                    for j, elem in enumerate(user):
-                        self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
+                if count != 0:
+                    self.tableWidget.setRowCount(len(data))
+                    self.tableWidget.setColumnCount(len(data[0]))
+                    for i, user in enumerate(data):
+                        for j, elem in enumerate(user):
+                            self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
                 self.l_count.setText(f'Количество удалённых пользователей: {count}')
                 del data  # Очистка памяти
         else:
