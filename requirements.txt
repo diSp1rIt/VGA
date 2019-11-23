@@ -10,3 +10,4 @@ urllib3==1.25.7
 vk==2.0.2
 numpy==1.17.4
 pyqtgraph==0.10.0
+PyInstaller==3.5
