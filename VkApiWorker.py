@@ -121,11 +121,3 @@ class VkParser:
                 self.data = None
         else:
             addLog('|Parser|: ' + 'Token is invalid.')
-
-
-if __name__ == '__main__':
-    vk = VkParser(
-        'ebb21185498f0c050160fca5a63948ceba7cfa9e2bba2f6d900677069ccaf6e264f65a4dcff4fd1ff66f8')
-    vk.getDataFromGroup('https://vk.com/hitrst')
-    vk.convertData()
-    print(*vk.data[:3], sep='\n')
