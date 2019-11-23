@@ -162,7 +162,7 @@ class SQL:
                         WHERE group_id LIKE "%,_{group_id},_%" 
                         OR group_id LIKE "%,_{group_id}" 
                         OR group_id LIKE "{group_id}" 
-                        OR group_id LIKE "{group_id},_%") AND deactivated = "banned"''').fetchall()
+                        OR group_id LIKE "{group_id},_%") AND deactivated = "deleted"''').fetchall()
                 except Exception as e:
                     addLog('|SQL|: ' + str(e))
             else:
