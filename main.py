@@ -36,7 +36,7 @@ class Program(QWidget, Ui_Form):
 
     # Функция отображает текущие логи
     def show_logs(self):
-        with open('apigv.log', 'r') as f:
+        with open('vua.log', 'r') as f:
             self.logs.setText(''.join(f.readlines()))
 
     # Функция выбора файла db
