@@ -7,11 +7,11 @@
 from PyQt5.QtWidgets import QWidget, QApplication
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtWidgets import QTableWidgetItem
-from form import Ui_Form
+from GUI.Main.form import Ui_Form
 import sys
-import VkApiWorker
-import SqlWorker
-from Logger import *
+import modules.VkApiWorker as vaw
+import modules.SqlWorker as sw
+from modules.Logger import *
 from time import sleep
 
 
@@ -55,7 +55,7 @@ class Program(QWidget, Ui_Form):
                                                    '', 'База данных (*.db)')[0]
         if self.db_file != '':
             try:
-                self.sql = SqlWorker.SQL(self.db_file)
+                self.sql = sw.SQL(self.db_file)
                 self.sql.cur.execute('''SELECT * FROM users''')
             except Exception as e:
                 self.db_file = None
@@ -88,7 +88,7 @@ class Program(QWidget, Ui_Form):
                 for line in f:
                     self.token = line[:-1]
                     break
-            self.vk = VkApiWorker.VkParser(self.token)
+            self.vk = vaw.VkParser(self.token)
         except Exception as e:
             addLog('|Main|: ' + str(e))
 
@@ -116,11 +116,13 @@ class Program(QWidget, Ui_Form):
                 data = self.sql.get_curent(group_id)
                 count = len(data)
                 if count != 0:
-                    self.tableWidget.setRowCount(len(data))
+                    self.tableWidget.setRowCount(len(data) + 1)
                     self.tableWidget.setColumnCount(len(data[0]))
+                    for j, field in enumerate(self.sql.fields.split(', ')):
+                        self.tableWidget.setItem(0, j, QTableWidgetItem(str(field)))
                     for i, user in enumerate(data):
                         for j, elem in enumerate(user):
-                            self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
+                            self.tableWidget.setItem(i + 1, j, QTableWidgetItem(str(elem)))
                 self.l_count.setText(f'Количество найденных записей: {count}')
                 del data  # Очистка памяти
             elif self.comboBox.currentText() == 'Показать всё':
@@ -141,11 +143,14 @@ class Program(QWidget, Ui_Form):
                 count = len(data)
                 if count != 0:
                     # Вывод в таблицу
-                    self.tableWidget.setRowCount(len(data))
+                    fields = 'id, first_name, last_name, bdate'.split(', ')
+                    self.tableWidget.setRowCount(len(data) + 1)
                     self.tableWidget.setColumnCount(len(data[0]))
+                    for j, field in enumerate(fields):
+                        self.tableWidget.setItem(0, j, QTableWidgetItem(str(field)))
                     for i, user in enumerate(data):
                         for j, elem in enumerate(user):
-                            self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
+                            self.tableWidget.setItem(i + 1, j, QTableWidgetItem(str(elem)))
                     self.l_count.setText(f'Количество найденных записей: {count}')
 
                     # Построения графика возраста от кол-ва
@@ -173,11 +178,14 @@ class Program(QWidget, Ui_Form):
                 count = len(data)
                 # Вывод в таблицу
                 if count != 0:
-                    self.tableWidget.setRowCount(len(data))
+                    fields = 'id, first_name, last_name, sex'.split(', ')
+                    self.tableWidget.setRowCount(len(data) + 1)
                     self.tableWidget.setColumnCount(len(data[0]))
+                    for j, field in enumerate(fields):
+                        self.tableWidget.setItem(0, j, QTableWidgetItem(str(field)))
                     for i, user in enumerate(data):
                         for j, elem in enumerate(user):
-                            self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
+                            self.tableWidget.setItem(i + 1, j, QTableWidgetItem(str(elem)))
                 self.l_count.setText(f'Количество найденных записей: {count}')
                 del data  # Очистка памяти
             elif self.comboBox.currentText() == 'Кол-во \"banned\"':
@@ -185,11 +193,14 @@ class Program(QWidget, Ui_Form):
                 count = len(data)
                 # Вывод в таблицу
                 if count != 0:
-                    self.tableWidget.setRowCount(len(data))
+                    fields = 'id, first_name, last_name, deactivated'.split(', ')
+                    self.tableWidget.setRowCount(len(data) + 1)
                     self.tableWidget.setColumnCount(len(data[0]))
+                    for j, field in enumerate(fields):
+                        self.tableWidget.setItem(0, j, QTableWidgetItem(str(field)))
                     for i, user in enumerate(data):
                         for j, elem in enumerate(user):
-                            self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
+                            self.tableWidget.setItem(i + 1, j, QTableWidgetItem(str(elem)))
                 self.l_count.setText(f'Количество забаненых пользователей: {count}')
                 del data  # Очистка памяти
             elif self.comboBox.currentText() == 'Кол-во \"deleted\"':
@@ -197,11 +208,14 @@ class Program(QWidget, Ui_Form):
                 count = len(data)
                 # Вывод в таблицу
                 if count != 0:
-                    self.tableWidget.setRowCount(len(data))
+                    fields = 'id, first_name, last_name, deactivated'.split(', ')
+                    self.tableWidget.setRowCount(len(data) + 1)
                     self.tableWidget.setColumnCount(len(data[0]))
+                    for j, field in enumerate(fields):
+                        self.tableWidget.setItem(0, j, QTableWidgetItem(str(field)))
                     for i, user in enumerate(data):
                         for j, elem in enumerate(user):
-                            self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
+                            self.tableWidget.setItem(i + 1, j, QTableWidgetItem(str(elem)))
                 self.l_count.setText(f'Количество удалённых пользователей: {count}')
                 del data  # Очистка памяти
         else:
