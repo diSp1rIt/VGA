@@ -1,5 +1,5 @@
 import sqlite3 as sql
-from Logger import *
+from modules.Logger import *
 
 
 class SQL:

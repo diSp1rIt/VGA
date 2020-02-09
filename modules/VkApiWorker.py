@@ -4,7 +4,7 @@
 
 
 import vk
-from Logger import addLog
+from modules.Logger import addLog
 import time
 
 

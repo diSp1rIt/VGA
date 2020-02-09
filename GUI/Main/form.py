@@ -192,7 +192,7 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "АПИГВ"))
+        Form.setWindowTitle(_translate("Form", "VGA"))
         self.label_3.setText(_translate("Form", "Детали:"))
         self.label_2.setText(_translate("Form", "Категории анализа:"))
         self.comboBox.setItemText(0, _translate("Form", "Показать текущую группу"))
